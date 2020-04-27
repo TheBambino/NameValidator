@@ -65,20 +65,20 @@ namespace NameValidator
 
 			Player player = Main.player[e.Who];
 			// If the player's name is null then it most likely isn't a real player
-			if (!String.IsNullOrEmpty(player?.Name))
+			if (!String.IsNullOrEmpty(player?.name))
 			{
-				string name = player.Name;
+				string name = player.name;
 				if (!ValidateString(name))
 				{
 					switch (Config.Action.ToLowerInvariant())
 					{
 						case "ban":
-							TShock.Utils.Ban(TShock.Players[e.Who], Config.Reason);
+							TShock.Players[e.Who].Ban(Config.Reason);
 							TShock.Log.ConsoleInfo($"Player '{name}' was banned for \"{Config.Reason}\".");
 							e.Handled = true;
 							return;
 						case "kick":
-							TShock.Utils.Kick(TShock.Players[e.Who], Config.Reason, silent: true);
+							TShock.Players[e.Who].Kick(Config.Reason, silent: true);
 							TShock.Log.ConsoleInfo($"Player '{name}' was kicked for \"{Config.Reason}\".");
 							e.Handled = true;
 							return;
