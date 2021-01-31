@@ -105,13 +105,24 @@ namespace NameValidator
 			{
 				foreach (string regex in Config.InvalidNameRegexes)
 				{
-					if (Regex.IsMatch(s, regex))
-						return false;
+					if (Config.IgnoreCase)
+					{
+						if (Regex.IsMatch(s, regex, RegexOptions.IgnoreCase))
+							return false;
+					}
+					else
+					{
+						if (Regex.IsMatch(s, regex))
+							return false;
+					}
 				}
 			}
 
 			// Invalid char check and return if valid
-			return !Config.InvalidChars.Intersect(s).Any();
+			if (Config.IgnoreCase)
+				return !Config.InvalidChars.ToLowerInvariant().Intersect(s.ToLowerInvariant()).Any();
+			else
+				return !Config.InvalidChars.Intersect(s).Any();
 		}
 	}
 }
