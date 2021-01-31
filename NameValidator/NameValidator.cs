@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows.Media;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
@@ -14,8 +12,6 @@ namespace NameValidator
 	[ApiVersion(2, 1)]
 	public class NameValidator : TerrariaPlugin
 	{
-		private FontFamily font;
-
 		public override string Author => "Enerdy";
 
 		public override string Description => "Validate character names on join based on a configuration file.";
@@ -31,25 +27,13 @@ namespace NameValidator
 		{
 			Order = 10;
 		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ServerApi.Hooks.NetGreetPlayer.Register(this, OnJoin);
-			}
-		}
-
+		
 		public override void Initialize()
 		{
-			string fontname = "Andy";
-			if ((font = Fonts.SystemFontFamilies.FirstOrDefault(f => f.Source.Equals(fontname, StringComparison.OrdinalIgnoreCase))) == null)
-				TShock.Log.ConsoleError($"The font '{fontname}' was not found.");
-
 			string path = Path.Combine(TShock.SavePath, "NameValidator.json");
 			Config = Config.Read(path);
 
-			ServerApi.Hooks.NetGreetPlayer.Register(this, OnJoin);
+            ServerApi.Hooks.ServerJoin.Register(this, OnJoin);
 
 			Commands.ChatCommands.Add(new Command("namevalidator.reload", (args) =>
 			{
@@ -58,7 +42,17 @@ namespace NameValidator
 			}, "nvreload"));
 		}
 
-		private void OnJoin(GreetPlayerEventArgs e)
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				//ServerApi.Hooks.NetGreetPlayer.Register(this, OnJoin);
+				ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
+			}
+		}
+
+		//private void OnJoin(GreetPlayerEventArgs e)
+		private void OnJoin(JoinEventArgs e)
 		{
 			if (e.Handled || e.Who < 0 || e.Who > Main.player.Length - 1)
 				return;
@@ -67,18 +61,23 @@ namespace NameValidator
 			// If the player's name is null then it most likely isn't a real player
 			if (!String.IsNullOrEmpty(player?.name))
 			{
-				string name = player.name;
+				string name = player.name.ToLower();
+				var playerX = new TSPlayer(e.Who);
+
+				if (name.Length < Config.MinimumCharacters)
+                playerX.Kick($"Minimum name length of {Config.MinimumCharacters} characters required!", true, true);
+
 				if (!ValidateString(name))
 				{
 					switch (Config.Action.ToLowerInvariant())
 					{
 						case "ban":
-							TShock.Utils.Ban(TShock.Players[e.Who], Config.Reason);
+							TShock.Players[e.Who].Ban(Config.Reason);
 							TShock.Log.ConsoleInfo($"Player '{name}' was banned for \"{Config.Reason}\".");
 							e.Handled = true;
 							return;
 						case "kick":
-							TShock.Utils.Kick(TShock.Players[e.Who], Config.Reason, silent: true);
+							TShock.Players[e.Who].Kick(Config.Reason, silent: true);
 							TShock.Log.ConsoleInfo($"Player '{name}' was kicked for \"{Config.Reason}\".");
 							e.Handled = true;
 							return;
@@ -87,6 +86,10 @@ namespace NameValidator
 							return;
 					}
 				}
+			}
+			else
+			{ 
+			TShock.Log.ConsoleInfo($"An attempted connection with a name just occured.");
 			}
 		}
 
@@ -97,25 +100,6 @@ namespace NameValidator
 		/// <returns>Whether the string is valid.</returns>
 		private bool ValidateString(string s)
 		{
-			// Font contains check
-			if (Config.TerrariaFontOnly)
-			{
-				foreach (char c in s)
-				{
-					ICollection<Typeface> typefaces = font.GetTypefaces();
-					GlyphTypeface glyph;
-					foreach (Typeface t in typefaces)
-					{
-						t.TryGetGlyphTypeface(out glyph);
-						if (glyph != null && !glyph.CharacterToGlyphMap.ContainsKey(Convert.ToInt16(c)))
-						{
-							// Spot detected
-							return false;
-						}
-					}
-				}
-			}
-
 			// Regex check
 			if (Config.InvalidNameRegexes != null)
 			{

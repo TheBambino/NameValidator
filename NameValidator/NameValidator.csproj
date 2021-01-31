@@ -53,16 +53,15 @@
       <HintPath>DLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OTAPI">
-      <HintPath>..\..\Server\OTAPI.dll</HintPath>
+      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\OTAPI.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="TerrariaServer">
-      <HintPath>..\..\Server\TerrariaServer.exe</HintPath>
+      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\TerrariaServer.exe</HintPath>
     </Reference>
     <Reference Include="TShockAPI">
-      <HintPath>..\..\Server\ServerPlugins\TShockAPI.dll</HintPath>
+      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

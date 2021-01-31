@@ -15,6 +15,11 @@ namespace NameValidator
 		public string Action = "kick";
 
 		/// <summary>
+		/// The minimum number of characters in a nickname.
+		/// </summary>
+		public int MinimumCharacters = 3;
+
+		/// <summary>
 		/// The reason to use when the action is set to kick/ban.
 		/// </summary>
 		public string Reason = "Invalid character name.";
@@ -28,11 +33,6 @@ namespace NameValidator
 		/// A list of regexes to match character names against. A matching name is deemed as invalid.
 		/// </summary>
 		public List<string> InvalidNameRegexes = new List<string>();
-
-		/// <summary>
-		/// Whether to kick any player using characters that the Terraria font doesn't natively support.
-		/// </summary>
-		public bool TerrariaFontOnly = false;
 
 		public static Config Read(string path)
 		{
