@@ -50,18 +50,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>refs\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OTAPI">
-      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\OTAPI.dll</HintPath>
+    <Reference Include="OTAPI, Version=1.4.1.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>refs\OTAPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TerrariaServer">
-      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\TerrariaServer.exe</HintPath>
+    <Reference Include="TerrariaServer, Version=1.4.1.2, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>refs\TerrariaServer.exe</HintPath>
     </Reference>
-    <Reference Include="TShockAPI">
-      <HintPath>..\..\TShock_Master_Dev\TShockAPI\bin\Release\TShockAPI.dll</HintPath>
+    <Reference Include="TShockAPI, Version=4.4.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>refs\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +75,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="refs\Newtonsoft.Json.dll" />
+    <Content Include="refs\OTAPI.dll" />
+    <Content Include="refs\TerrariaServer.exe" />
+    <Content Include="refs\TShockAPI.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

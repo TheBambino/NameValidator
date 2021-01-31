@@ -5,11 +5,10 @@ releases/
 ###################
 *.com
 *.class
-*.dll
-*.exe
 *.o
 *.so
 */bin/*
+*/DLL/*
 */obj/*
 bin/*
 obj/*
