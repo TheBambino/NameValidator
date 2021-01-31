@@ -46,7 +46,6 @@ namespace NameValidator
 		{
 			if (disposing)
 			{
-				//ServerApi.Hooks.NetGreetPlayer.Register(this, OnJoin);
 				ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
 			}
 		}
@@ -89,7 +88,7 @@ namespace NameValidator
 			}
 			else
 			{ 
-			TShock.Log.ConsoleInfo($"An attempted connection with a name just occured.");
+			TShock.Log.ConsoleInfo($"An attempted connection without a null just occured.");
 			}
 		}
 
